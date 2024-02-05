@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<update xmlns="http://ns.adobe.com/air/framework/update/description/1.0">
+	<version>1.1.0</version>
+	<url>http://blog.coursevector.com/downloads/Whistler-1-1-0.air</url>
+	<description><![CDATA[
+	New version includes:
+		* Updated to Adobe AIR 3.1
+		* Updated to Flex 4.6
+		* Added 2mb limit to loading large log files to prevent crashing
+	]]></description>
+</update>

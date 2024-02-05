@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Window xmlns:local="*" 
+	xmlns:mx="http://www.adobe.com/2006/mxml" 
+	title="Update Notification" 
+	maximizable="false" 
+	minimizable="true" 
+	resizable="false" 
+	layout="absolute" 
+	transparent="false" 
+	systemChrome="standard" 
+	type="normal"
+	width="535" 
+	height="390" 
+	showStatusBar="false"
+	horizontalAlign="center" 
+	verticalAlign="middle" 
+	creationComplete="init(event)">
+	
+	<mx:Script>
+          <![CDATA[
+			import cv.managers.UpdateManager;
+			import mx.events.FlexEvent;
+			
+			private var um:UpdateManager = UpdateManager.instance;
+			
+			private function init(event:FlexEvent):void {
+				um.addEventListener(ProgressEvent.PROGRESS, onProgress);
+				um.addEventListener(UpdateManager.DOWNLOAD_ERROR, onLoadError);
+				um.addEventListener(UpdateManager.UPDATE_ERROR, onUpdateError);
+				
+				txtTitle.text = "Update available";
+				txtMessage.text = "An updated version of " + um.currentName + " is available for download.";
+				txtVersions.text = um.currentVersion + "\n" + um.remoteVersion;
+				taNotes.htmlText = um.description;
+				
+				orderToFront();
+			}
+			
+			private function onClickCancel(event:MouseEvent):void {
+				this.close();
+			}
+			
+			private function onClickInstall(event:MouseEvent):void {
+				btnInstall.enabled = false;
+				btnCancel.enabled = false;
+				txtTitle.text = "Downloading...";
+				um.downloadUpdate();
+			}
+			
+			private function onProgress(event:ProgressEvent):void {
+				var percent:uint = (event.bytesLoaded / event.bytesTotal) * 100;
+				txtTitle.text = "Downloading... " + Math.ceil(percent) + "%";
+			}
+			
+			private function onLoadError(event:Event):void {
+				btnCancel.enabled = true;
+				txtTitle.text = "Error downloading update.";
+			}
+			
+			private function onUpdateError(event:Event):void {
+				btnCancel.enabled = true;
+				txtTitle.text = "Error installing update.";
+			}
+          ]]>
+    </mx:Script>
+    
+    <mx:VBox 
+    	left="10" 
+    	right="10" 
+    	top="10" 
+    	bottom="10">
+		<mx:HBox 
+			top="10" 
+			left="10" 
+			right="10" 
+			horizontalGap="0" 
+			height="150" 
+			width="100%">
+			<mx:Spacer width="15"/>
+			<local:SmoothImage 
+				source="assets/icons/diamond_128.png" 
+				width="75" 
+				height="100%" 
+				scaleContent="true" 
+				autoLoad="true"/>
+			<mx:VBox 
+				height="100%" 
+				verticalGap="5" 
+				width="100%" 
+				horizontalAlign="center">
+				<mx:Text 
+					width="95%" 
+					height="30" 
+					textAlign="left" 
+					id="txtTitle" 
+					text="txtTitle" 
+					styleName="TitleTextStyle" />
+				<mx:Text 
+					text="txtMessage" 
+					height="35" 
+					width="95%" 
+					styleName="NormalTextStyle" 
+					id="txtMessage"/>
+				<mx:HBox 
+					horizontalAlign="center" 
+					width="100%" 
+					horizontalGap="20" >
+					<mx:Text 
+						text="Installed Version:&#xa;Update Version:" 
+						textAlign="right"/>
+					<mx:Text 
+						text="txtVersions" 
+						id="txtVersions" 
+						styleName="NormalBoldTextStyle" />
+				</mx:HBox>
+				<mx:HBox 
+					verticalAlign="middle" 
+					width="100%" 
+					horizontalAlign="center" 
+					horizontalGap="20" >
+					<mx:Button 
+						label="Download now" 
+						id="btnInstall" 
+						styleName="SmallTextStyle" 
+						click="onClickInstall(event)" 
+						height="28" 
+						width="130"/>
+					<mx:Button 
+						id="btnCancel" 
+						label="Download later" 
+						bottom="10" 
+						styleName="SmallTextStyle" 
+						horizontalCenter="-45" 
+						click="onClickCancel(event)" 
+						height="28" 
+						width="130"/>
+				</mx:HBox>
+			</mx:VBox>
+		</mx:HBox>
+		<mx:HRule 
+			left="5" 
+			right="5" 
+			width="100%"/>
+		<mx:Label 
+			text="Release notes" 
+			styleName="NormalTextStyle" />
+		<mx:TextArea 
+			right="10" 
+			left="10" 
+			bottom="10" 
+			width="100%" 
+			height="100%" 
+			id="taNotes"/>
+	</mx:VBox>
+</mx:Window>

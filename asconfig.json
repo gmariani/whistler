@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"output": "bin/Whistler.swf",
+		"source-path": [
+			"src"
+		],
+		"library-path": [
+			"libs"
+		]
+	},
+	"files": [
+		"src/Whistler.mxml"
+	],
+	"application": "src/Whistler-app.xml",
+	"copySourcePathAssets": true,
+	"additionalOptions": "-locale en_US"
+}

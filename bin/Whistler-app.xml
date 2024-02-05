@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application xmlns="http://ns.adobe.com/air/application/3.1">
+	<id>com.coursevector.whistler</id>
+	
+	<versionLabel>1.1.0</versionLabel>
+	<versionNumber>1.1.0</versionNumber>
+	<filename>whistler</filename>
+	<name>Course Vector .whistler</name>
+
+	<description>Flash debugging tool. Displays traces when playing Flash in a debug player.</description>
+	
+	<copyright>Copyright (c) 2014 Course Vector</copyright>
+	
+	<initialWindow>
+		<title>.whistler</title>
+		<content>Whistler.swf</content>
+		<systemChrome>standard</systemChrome>
+		<transparent>false</transparent>
+		<visible>true</visible>
+		<minimizable>true</minimizable>
+		<maximizable>true</maximizable>
+		<resizable>true</resizable>
+	</initialWindow>
+	
+	<icon>
+		<image16x16>assets/icons/diamond_16.png</image16x16>
+		<image32x32>assets/icons/diamond_32.png</image32x32>
+		<image48x48>assets/icons/diamond_48.png</image48x48>
+		<image128x128>assets/icons/diamond_128.png</image128x128>
+	</icon>
+	
+	<customUpdateUI>false</customUpdateUI>
+	<allowBrowserInvocation>false</allowBrowserInvocation>
+	<installFolder>Course Vector</installFolder>
+	<programMenuFolder>Course Vector</programMenuFolder>
+</application>

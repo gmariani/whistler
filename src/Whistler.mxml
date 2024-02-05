@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication 
+	xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" 
+	xmlns:mx="library://ns.adobe.com/flex/mx" 
+	width="550" 
+	height="600" 
+	showStatusBar="false"
+	creationComplete="init(event)" addedToStage="initTracker()">
+	
+	<s:layout>
+		<s:BasicLayout></s:BasicLayout>
+	</s:layout>
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		
+		/* AIR Part Test*/
+		s|Window {
+			statusBarBackgroundColor:#C0C0C0;
+			backgroundAlpha: 1.0;
+			backgroundColor: #333333;
+		}
+	</fx:Style>
+	<fx:Script source="cv/whistler/Main.as" />
+	
+	<fx:Declarations>
+		<s:Fade id="fadeOut" duration="125" alphaFrom="1.0" alphaTo="0.0"/>
+	    <s:Fade id="fadeIn" duration="125" alphaFrom="0.0" alphaTo="1.0"/>
+	</fx:Declarations>
+	
+	<mx:ViewStack id="vsMain" width="100%" x="0" creationPolicy="all" height="100%" y="0">
+		<mx:Canvas id="TracerMain" width="100%" height="100%" hideEffect="{fadeOut}" 
+			showEffect="{fadeIn}">
+			<s:VGroup width="100%" height="100%" top="0" gap="0">
+				<mx:ControlBar width="100%" includeInLayout="true">
+					<s:Spacer width="100%"/>
+					<mx:ToggleButtonBar
+						toggleOnClick="true"
+						itemClick="onClickTab(event);" labelField="label" toolTipField="tooltip">
+						<mx:dataProvider>
+							<fx:Object label="Trace" tooltip="Trace Log" />
+							<fx:Object label="Policy" tooltip="Policy Log" />
+						</mx:dataProvider>
+					</mx:ToggleButtonBar>
+					<mx:VRule height="15"/>
+					<mx:Button label="Clear" id="btnClear" labelPlacement="right" click="onClickClear()" toolTip="Clear Log" icon="{clearIcon}"/>
+					<mx:Button label="Pause" id="btnPausePlay" labelPlacement="right" click="onClickPausePlay()" toolTip="Pause Log Updates" icon="{pauseIcon}"/>
+					<mx:Button label="Open" id="btnOpen" labelPlacement="right" click="onClickOpen()" toolTip="Open Log" icon="{openIcon}"/>
+					<mx:VRule height="15"/>
+					<mx:Button label="Options" id="btnOptions" click="onClickOptions()" toolTip="Options" />
+					<mx:Image id="btnAbout" source="assets/icons/helpIcon.png" click="onClickAbout()" toolTip="About .whistler" autoLoad="true"/>
+				</mx:ControlBar>
+				<mx:TextArea id="taBuffer"  width="100%" height="100%" editable="false" />
+				<s:HGroup width="100%" horizontalAlign="center" verticalAlign="middle" height="40">
+					<s:Spacer width="10"/>
+					<s:Label text="Filter" id="lblFilter"  textAlign="right" fontWeight="normal"/>
+					<s:TextInput id="txtFilter" width="100%" change="onChangeFilter(event)" >
+						<s:toolTip>You can specify a text or a regular expression pattern in order to filter the log.</s:toolTip>
+					</s:TextInput>
+					<s:Spacer width="10"/>
+				</s:HGroup>
+			</s:VGroup>
+		</mx:Canvas>
+		
+		<mx:Canvas id="TracerOptions" width="100%" height="100%" hideEffect="{fadeOut}" 
+			showEffect="{fadeIn}">
+			<s:VGroup left="10" top="10" right="10" bottom="10">
+				<s:Label text="Help" fontWeight="bold" fontSize="12" textAlign="center" horizontalCenter="-10" width="100%" top="115"/>
+				<s:HGroup width="100%">
+					<mx:LinkButton label="Determine version of Flash Player" horizontalCenter="-10" id="btnVersion" click="onClickVersion()" top="376" width="50%"/>
+					<mx:LinkButton label="Download the latest Flash Debug Player" horizontalCenter="-10" id="btnDownload" click="onClickDownload()" top="376" width="50%"/>
+				</s:HGroup>
+				<mx:HRule width="100%"/>
+				<s:Label text="Preferences" fontWeight="bold" fontSize="12" textAlign="center" horizontalCenter="-10" width="100%" top="115"/>
+				<s:HGroup width="100%" gap="11" verticalAlign="middle" horizontalCenter="0" top="85" horizontalAlign="center">
+					<s:CheckBox id="cbWrap" width="85" label="Word Wrap" click="onClickWrap(event)"
+								selected="true" toolTip="Wrap log text"/>
+					<s:CheckBox id="cbLock" width="85" label="Auto Scroll" enabled="true"
+								selected="true" toolTip="Autoscroll text box"/>
+					<s:CheckBox id="cbTop" width="105" label="Always On Top" enabled="true"
+								selected="true" toolTip="Keep .whistler on top"/>
+					<mx:VRule height="15"/>
+					<s:Label text="Font Size" id="lblSize" color="#AFAFAF"/>
+					<s:ComboBox width="75" id="ddSize" selectedIndex="4" dataProvider="{FONT_SIZES}" close="onCloseDD(event);"/>
+				</s:HGroup>
+				<mx:HRule width="100%" strokeColor="#222222"/>
+				<s:Label text="Trace Log Settings" fontWeight="bold" width="100%" textAlign="left"/>
+				<s:HGroup width="100%" verticalAlign="middle">
+					<s:CheckBox label="Display Warnings" width="234" id="cbWarnings" toolTip="Enables error reporting"/>
+					<s:Label color="#AFAFAF" text="Max Warnings" verticalAlign="middle"/>
+					<s:NumericStepper value="100" width="100" maximum="1000" minimum="0" stepSize="1" id="nsWarnings"/>
+				</s:HGroup>
+				<mx:HRule width="100%" strokeColor="#222222"/>
+				<s:Label text="Undocumented Trace Log Settings" width="100%" textAlign="left" fontWeight="bold" />
+				<mx:Text text="The following settings require Trace Output Buffered to be enabled. **CAUTION** It's very easy to crash the player when these (except for Trace Output Buffered) are enabled." width="100%"/>
+				<s:HGroup width="100%">
+					<s:VGroup width="100%">
+						<s:CheckBox label="Trace Output Buffered" id="cbTraceBuffered">
+							<s:toolTip>Traces will be buffered and write to disk multiple lines in one access</s:toolTip>
+						</s:CheckBox>
+						<s:CheckBox label="AS3 Verbose" id="cbVerbose">
+							<s:toolTip>Traces detailed information about SWF ByteCode structure and Runtime parsing of the bytecode</s:toolTip>
+						</s:CheckBox>
+						<s:CheckBox label="AS3 Trace" id="cbTrace">
+							<s:toolTip>Trace every single call to any function that is being called in the SWF at runtime</s:toolTip>
+						</s:CheckBox>
+					</s:VGroup>
+					<s:VGroup width="100%">
+						<s:CheckBox label="AS3 Static Profile" id="cbStatic">
+							<s:toolTip>Enables Just in Time Compiler (NanoJIT) logs. Displays detailed information on function conversion, bytecode conversion, MIR (machine-dependent intermediate representation) created, memory used and many others. At the end of execution, it also output a summary of all bytecode processed (For each opcode you have the number of occurrence, relatives importance, etc)</s:toolTip>
+						</s:CheckBox>
+						<s:CheckBox label="AS3 Dynamic Profile" id="cbDynamic">
+							<s:toolTip>Shows dynamic information about the opcodes being called and gives statistic for each. The statistics include count, cycles, (percent)count, (percent)times and CPI</s:toolTip>
+						</s:CheckBox>
+					</s:VGroup>
+				</s:HGroup>
+				<mx:HRule width="100%" strokeColor="#222222"/>
+				<s:Label text="Policy Log Settings (Introduced in Flash Player 9,0,115,0)" width="100%" fontWeight="bold" />
+				<mx:Text text="The policy file log shows messages for every event relating to policy files ; attemtps to retrieve them, successes and failurs in processing them, and the fates of the requests that depend on them." width="100%"/>
+				<mx:LinkButton label="Log Message Reference" click="onClickReference()" width="100%"/>
+				<s:HGroup width="100%">
+					<s:CheckBox label="Enable Policy File Logging" width="233" id="cbPolicyLogging" toolTip="Enables Policy File Logging"/>
+					<s:CheckBox label="Enable Log Append" id="cbPolicyAppend" toolTip="Do not clear log at startup"/>
+				</s:HGroup>
+				<mx:HRule width="100%"/>
+				
+				<s:HGroup width="100%" horizontalAlign="center" height="100%" verticalAlign="bottom">
+					<s:Button click="onClickOk()" label="OK" id="btnOk" width="100"/>
+				</s:HGroup>
+			</s:VGroup>
+		</mx:Canvas>
+	</mx:ViewStack>
+</s:WindowedApplication>
